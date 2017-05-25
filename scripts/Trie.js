@@ -38,6 +38,16 @@ class Trie {
   }
 
   suggest(word) {
+    if (!word) {return 'Input a word!'};
+    let array = this.suggestFind(word)
+    let sorted = array.slice(0, 10)
+    sorted = sorted.sort((a, b) => b.frequency - a.frequency)
+    sorted = sorted.map(elem => elem = elem.word)
+
+    return sorted
+  }
+
+  suggestFind(word) {
     let currentNode = this.root;
     let splicedWord = [...word.toLowerCase()];
     let completeWord = word;
@@ -48,10 +58,10 @@ class Trie {
         }
       })
 
-     return this.searchHelper(currentNode, word)
+     return this.suggestHelper(currentNode, word)
   }
 
-  searchHelper(node, word, wordArray = []) {
+  suggestHelper(node, word, wordArray = []) {
     let currentNode = node;
     let completeWord = word;
 
@@ -59,19 +69,54 @@ class Trie {
        completeWord = word;
       return
     }
+
     let keys = Object.keys(currentNode.children)
 
     keys.forEach((elem) => {
       let newWord = completeWord + currentNode.children[elem].letter;
 
       if (currentNode.children[elem].isAWord === true) {
-        wordArray.push(newWord)
+        wordArray.push({word: newWord,
+                        frequency: currentNode.children[elem].frequency})
       }
       if (currentNode.children) {
-      wordArray  = this.searchHelper(currentNode.children[elem], newWord, wordArray)
+      wordArray  = this.suggestHelper(currentNode.children[elem], newWord, wordArray)
       }
     })
+
     return wordArray
+  }
+
+  populate(array) {
+    array.forEach((elem) => {
+      this.insert(elem)
+    })
+    return 'populated dat bitch!'
+  }
+
+  select(word) {
+    if (!word) {return 'Input a word!'};
+    let currentNode = this.root;
+    let splicedWord = [...word.toLowerCase()];
+    let completeWord = word;
+
+    splicedWord.forEach((elem, index, array) => {
+      if ( index === array.length - 1) {
+        currentNode.children[elem].frequency++
+      }
+      if (currentNode.children[elem]) {
+        currentNode = currentNode.children[elem]
+      }
+
+    })
+  }
+
+  scrubArray(array) {
+     let sorted = array.slice(0, 10)
+     sorted = sorted.sort((a, b) => b.frequency - a.frequency)
+     sorted = sorted.map(elem => elem = elem.word)
+
+     return sorted
   }
 }
 
