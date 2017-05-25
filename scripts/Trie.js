@@ -30,17 +30,21 @@ class Trie {
     let keys = Object.keys(currentNode.children)
 
     keys.forEach((elem) => {
-     if (currentNode.children[elem].isAWord === true) {
-       this.wordCount++
-     }
-     this.count(currentNode.children[elem])
+      if (currentNode.children[elem].isAWord === true) {
+        this.wordCount++
+      }
+      this.count(currentNode.children[elem])
     })
   }
 
   suggest(word) {
-    if (!word) {return 'Input a word!'};
+    if (!word) {
+      return 'Input a word!'
+    }
+
     let array = this.suggestFind(word)
     let sorted = array.slice(0, 10)
+
     sorted = sorted.sort((a, b) => b.frequency - a.frequency)
     sorted = sorted.map(elem => elem = elem.word)
 
@@ -50,15 +54,14 @@ class Trie {
   suggestFind(word) {
     let currentNode = this.root;
     let splicedWord = [...word.toLowerCase()];
-    let completeWord = word;
 
     splicedWord.forEach((elem) => {
-        if (currentNode.children[elem]) {
-          currentNode = currentNode.children[elem]
-        }
-      })
+      if (currentNode.children[elem]) {
+        currentNode = currentNode.children[elem]
+      }
+    })
 
-     return this.suggestHelper(currentNode, word)
+    return this.suggestHelper(currentNode, word)
   }
 
   suggestHelper(node, word, wordArray = []) {
@@ -66,7 +69,7 @@ class Trie {
     let completeWord = word;
 
     if (!currentNode.children) {
-       completeWord = word;
+      completeWord = word;
       return
     }
 
@@ -77,10 +80,13 @@ class Trie {
 
       if (currentNode.children[elem].isAWord === true) {
         wordArray.push({word: newWord,
-                        frequency: currentNode.children[elem].frequency})
+          frequency: currentNode.children[elem].frequency})
       }
       if (currentNode.children) {
-      wordArray  = this.suggestHelper(currentNode.children[elem], newWord, wordArray)
+        wordArray  = this.suggestHelper(
+        currentNode.children[elem],
+        newWord,
+        wordArray)
       }
     })
 
@@ -95,10 +101,11 @@ class Trie {
   }
 
   select(word) {
-    if (!word) {return 'Input a word!'};
+    if (!word) {
+      return 'Input a word!'
+    }
     let currentNode = this.root;
     let splicedWord = [...word.toLowerCase()];
-    let completeWord = word;
 
     splicedWord.forEach((elem, index, array) => {
       if ( index === array.length - 1) {
@@ -112,11 +119,12 @@ class Trie {
   }
 
   scrubArray(array) {
-     let sorted = array.slice(0, 10)
-     sorted = sorted.sort((a, b) => b.frequency - a.frequency)
-     sorted = sorted.map(elem => elem = elem.word)
+    let sorted = array.slice(0, 10)
 
-     return sorted
+    sorted = sorted.sort((a, b) => b.frequency - a.frequency)
+    sorted = sorted.map(elem => elem = elem.word)
+
+    return sorted
   }
 }
 
