@@ -5,8 +5,8 @@ class Trie {
   constructor() {
     this.root = new Node();
     this.wordCount = 0;
-
   }
+
   insert(word) {
     if (!word) {
       return 'Pass in a word!'
@@ -24,20 +24,27 @@ class Trie {
       currentNode = currentNode.children[elem];
     })
   }
+
   count(node = this.root) {
     let currentNode = node;
-
-    if (!currentNode) {
-      return
-    }
     let keys = Object.keys(currentNode.children)
 
     keys.forEach((elem) => {
       if (currentNode.children[elem].isAWord === true) {
-        this.wordCount++
+        this.wordCount++;
       }
       this.count(currentNode.children[elem])
     })
+  }
+
+
+  scrubArray(array) {
+    let sorted = array
+                .slice(0, 10)
+                .sort((a, b) => b.frequency - a.frequency)
+                .map(elem => elem = elem.word);
+
+    return sorted
   }
 
   suggest(word) {
@@ -45,11 +52,8 @@ class Trie {
       return 'Input a word!'
     }
 
-    let array = this.suggestFind(word)
-    let sorted = array.slice(0, 10)
-
-    sorted = sorted.sort((a, b) => b.frequency - a.frequency)
-    sorted = sorted.map(elem => elem = elem.word)
+    let array = this.suggestFind(word);
+    let sorted = this.scrubArray(array);
 
     return sorted
   }
@@ -60,7 +64,7 @@ class Trie {
 
     splicedWord.forEach((elem) => {
       if (currentNode.children[elem]) {
-        currentNode = currentNode.children[elem]
+        currentNode = currentNode.children[elem];
       }
     })
 
@@ -70,21 +74,20 @@ class Trie {
   suggestHelper(node, word, wordArray = []) {
     let currentNode = node;
     let completeWord = word;
-
-    let keys = Object.keys(currentNode.children)
+    let keys = Object.keys(currentNode.children);
 
     keys.forEach((elem) => {
       let newWord = completeWord + currentNode.children[elem].letter;
 
       if (currentNode.children[elem].isAWord === true) {
         wordArray.push({word: newWord,
-          frequency: currentNode.children[elem].frequency})
+          frequency: currentNode.children[elem].frequency});
       }
       if (currentNode.children) {
         wordArray  = this.suggestHelper(
         currentNode.children[elem],
         newWord,
-        wordArray)
+        wordArray);
       }
     })
 
@@ -93,7 +96,7 @@ class Trie {
 
   populate(array) {
     array.forEach((elem) => {
-      this.insert(elem)
+      this.insert(elem);
     })
   }
 
@@ -106,28 +109,13 @@ class Trie {
 
     splicedWord.forEach((elem, index, array) => {
       if ( index === array.length - 1) {
-        currentNode.children[elem].frequency++
+        currentNode.children[elem].frequency++;
       }
       if (currentNode.children[elem]) {
-        currentNode = currentNode.children[elem]
+        currentNode = currentNode.children[elem];
       }
-
     })
   }
-
-  scrubArray(array) {
-    let sorted = array.slice(0, 10)
-
-    sorted = sorted.sort((a, b) => b.frequency - a.frequency)
-    sorted = sorted.map(elem => elem = elem.word)
-
-    return sorted
-  }
 }
-
-
-
-
-
 
 export default Trie
