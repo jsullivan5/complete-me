@@ -35,3 +35,5 @@ describe('Node constructor', () => {
   })
 
 })
+
+export default describe
