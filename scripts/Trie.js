@@ -1,5 +1,5 @@
-import Node from '../scripts/Node.js'
-require('locus')
+import Node from '../scripts/Node.js';
+require('locus');
 
 class Trie {
   constructor() {
