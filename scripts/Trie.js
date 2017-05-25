@@ -66,12 +66,7 @@ class Trie {
 
   suggestHelper(node, word, wordArray = []) {
     let currentNode = node;
-    let completeWord = word;
-
-    if (!currentNode.children) {
-      completeWord = word;
-      return
-    }
+    let completeWord = word; 
 
     let keys = Object.keys(currentNode.children)
 
