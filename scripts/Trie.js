@@ -8,6 +8,9 @@ class Trie {
 
   }
   insert(word) {
+    if (!word) {
+      return 'Pass in a word!'
+    }
     let currentNode = this.root;
     let splicedWord = word.toLowerCase().split('');
 
@@ -66,7 +69,7 @@ class Trie {
 
   suggestHelper(node, word, wordArray = []) {
     let currentNode = node;
-    let completeWord = word; 
+    let completeWord = word;
 
     let keys = Object.keys(currentNode.children)
 
@@ -92,7 +95,6 @@ class Trie {
     array.forEach((elem) => {
       this.insert(elem)
     })
-    return 'populated dat bitch!'
   }
 
   select(word) {

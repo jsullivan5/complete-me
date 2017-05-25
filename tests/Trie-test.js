@@ -18,6 +18,15 @@ describe('The Trie', () => {
     expect(trie).to.be.instanceOf(Trie)
   })
 
+  it('Should have an insert function', () => {
+    expect(trie.insert()).to.be.a.function
+  })
+
+  it('Should throw an error without a word passed in',
+  () => {
+    expect(trie.insert()).to.equal('Pass in a word!');
+  })
+
   it('should be able to insert words', () => {
     trie.insert('hi');
     expect(trie.root.children.h.children.i.letter).to.equal('i');
@@ -31,11 +40,16 @@ describe('The Trie', () => {
   })
 
   it('should set the last letter isAWord property to true', () => {
+
     trie.insert('hil')
     trie.insert('hi');
 
     expect(trie.root.children.h.children.i.isAWord).to.equal(true)
     expect(trie.root.children.h.children.i.children.l.isAWord).to.equal(true)
+  })
+
+  it('Should have an count function', () => {
+    expect(trie.count()).to.be.a.function
   })
 
   it('should count number of words in the tree', () => {
@@ -47,6 +61,10 @@ describe('The Trie', () => {
     trie.insert('bats')
     trie.count();
     expect(trie.wordCount).to.equal(5)
+  })
+
+  it('Should have an suggest function', () => {
+    expect(trie.suggest()).to.be.a.function
   })
 
   it('should suggest words', () => {
@@ -66,6 +84,9 @@ describe('The Trie', () => {
     this.timeout(15000)
     trie.populate(dictionary);
 
+    it('Should have an populate function', () => {
+      expect(trie.populate).to.be.a.function
+    })
 
     it('should populate the tree with the dictionary', () => {
       expect(trie.wordCount).to.equal(0);
@@ -75,8 +96,18 @@ describe('The Trie', () => {
     })
 
     it('should return an array of 10 or less words', () => {
+      //With dictionary words
+
       expect(trie.suggest()).to.equal('Input a word!')
       expect(trie.suggest('hell').length).to.equal(10)
+
+      //With smaller sample
+
+      let trie2 = new Trie()
+
+      trie2.insert('morose')
+      trie2.insert('moron')
+      expect(trie2.suggest('mor').length).to.equal(2)
     })
 
     it('should suggest words based on the dictionary', () => {
@@ -96,6 +127,16 @@ describe('The Trie', () => {
         'hellbroth' ])
     })
     describe('select function', () => {
+
+      it('Should have an select function', () => {
+        expect(trie.select).to.be.a.function
+      })
+
+      it('Should throw an error without a word',
+      () => {
+        expect(trie.select()).to.equal('Input a word!')
+      })
+
       it(`should traverse the tree for the length of the
        word and incremenet the frequency`, () => {
         expect(trie.root.children.h.children.i.frequency).to.equal(0)
@@ -104,6 +145,17 @@ describe('The Trie', () => {
       })
 
       it('should order suggestions by frequency', () => {
+        expect(trie.suggest('hell')).to.deep.equal([
+          'helladian',
+          'helladic',
+          'helladotherium',
+          'hellandite',
+          'hellanodic',
+          'hellbender',
+          'hellborn',
+          'hellbox',
+          'hellbred',
+          'hellbroth' ])
         trie.select('hellbox')
         expect(trie.suggest('hell')).to.deep.equal([
           'hellbox',
@@ -116,6 +168,33 @@ describe('The Trie', () => {
           'hellborn',
           'hellbred',
           'hellbroth' ])
+        trie.select('hellbender')
+        trie.select('hellbender')
+        expect(trie.suggest('hell')).to.deep.equal([
+          'hellbender',
+          'hellbox',
+          'helladian',
+          'helladic',
+          'helladotherium',
+          'hellandite',
+          'hellanodic',
+          'hellborn',
+          'hellbred',
+          'hellbroth' ])
+        trie.select('hellbroth')
+        trie.select('hellbroth')
+        trie.select('hellbroth')
+        expect(trie.suggest('hell')).to.deep.equal([
+          'hellbroth',
+          'hellbender',
+          'hellbox',
+          'helladian',
+          'helladic',
+          'helladotherium',
+          'hellandite',
+          'hellanodic',
+          'hellborn',
+          'hellbred', ])
       })
     })
 
